@@ -1,0 +1,23 @@
+{
+  "name": "angular-stretch",
+  "version": "0.1.0",
+  "main": "angular-stretch.js",
+  "description": "Angular directive to stretch elements to window size.",
+  "homepage": "https://github.com/TechNaturally/angular-stretch",
+  "contributors": [
+    "Pat Long <plong00@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TechNaturally/angular-stretch.git"
+  },
+  "keywords": [
+    "angularjs",
+    "stretch"
+  ],
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
+}

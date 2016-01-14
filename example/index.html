@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="example">
+    <head>
+        <meta charset="utf-8">
+        <title>Angular Stretch</title>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.js"></script>
+
+        <script src="../angular-stretch.js"></script>
+
+        <script type="text/javascript">
+        	angular.module('example', ['angular-stretch']);
+        </script>
+
+        <style type="text/css">
+        	body {
+        		margin: 0px;
+        		padding: 0px;
+        	}
+        	.header {
+        		background-color: #93F;
+        		border-bottom: 3px solid #9F0;
+        		height: 120px;
+        	}
+
+        	.demo {
+        		background-color: #666;
+        		border: 5px dashed #993;
+        		min-height: 200px;
+        	}
+        </style>
+    </head>
+    <body>
+    	<div class="header"></div>
+    	<div class="demo" ng-stretch></div>
+    </body>
+</html>
