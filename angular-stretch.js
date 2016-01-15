@@ -1,20 +1,18 @@
 angular.module('angular-stretch', [])
-.directive('ngStretch', ['$window', function($window){
+.directive('ngStretch', ['$window', '$timeout', function($window, $timeout){
 	return {
 		restrict: 'EA',
-		link: function(scope, elem, attr){
-			var winElem = angular.element($window);
+		link: function(scope, element, attr){
+			var windowElement = angular.element($window);
 
-			winElem.on('resize', function(){
-				checkSize(elem, winElem);
-			});
-			checkSize(elem, winElem);
+			windowElement.on('resize', checkSize);
+			element.ready(checkSize);
+			$timeout(checkSize);
 
-			function checkSize(element, window){
+			function checkSize(){
 				var elemBounds = element[0].getBoundingClientRect();
-				var winHeight = window[0].innerHeight;
-
-				var heightDiff = winHeight - elemBounds.bottom;
+				var windowHeight = windowElement[0].innerHeight;
+				var heightDiff = windowHeight - elemBounds.bottom;
 				if(heightDiff){
 					element.css('height', (element[0].clientHeight + heightDiff)+'px');
 				}
