@@ -1,6 +1,6 @@
 {
   "name": "angular-stretch",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "angular-stretch.js",
   "description": "Angular directive to stretch elements to window size.",
   "homepage": "https://github.com/TechNaturally/angular-stretch",
