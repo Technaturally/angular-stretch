@@ -12,7 +12,7 @@ Add the `ng-stretch` attribute to the element you would like to stretch.
 ```
 <div ng-stretch></div>
 ```
-* `ng-stretch` adjusts the element's css `height` property.
+* `ng-stretch` adjusts the element's css `height` property so that the bottom edge touches the bottom of the window.
 
 #### With Bottom Element
 If there are elements below the element, you should assign an id to the bottom element and use that id as the value for the `ng-stretch` attribute.
@@ -20,7 +20,7 @@ If there are elements below the element, you should assign an id to the bottom e
 <div ng-stretch="footer"></div>
 <div id="footer"></div>
 ```
-* The element's bottom will stretch to footer or the bottom of the window if footer is below the edge of the screen.
+* `ng-stretch` adjusts the element's css `height` property so that the bottom edge touches the footer or the bottom of the window if footer is scrolled out of view.
 
 #### With Top Element
 Set the `ng-stretch-top` attribute to the id of an element to stretch the top to.
