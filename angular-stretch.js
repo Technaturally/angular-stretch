@@ -7,8 +7,8 @@ angular.module('angular-stretch', [])
 			var bottomElement, topElement;
 
 			var origCss = {
-				top: element.css('top'),
-				height: element.css('height')
+				top: element[0].style.top,
+				height: element[0].style.height
 			};
 			var enabled;
 
@@ -52,9 +52,30 @@ angular.module('angular-stretch', [])
 				}
 			}
 
-			function setBottom(id){
-				if(id){
-					var getBottom = document.getElementById(id);
+			// getElement functions provided to avoid dependency on jquery
+			function getElementByClassName(className){
+				var elems = document.getElementsByTagName('*');
+				for(var i=0; i < elems.length; i++){
+					if((' ' + elems[i].className + ' ').indexOf(' ' + className + ' ') != -1) {
+						return elems[i];
+					}
+				}
+			}
+			function getElement(query){
+				if(query.charAt(0) == '.'){
+					return getElementByClassName(query.substr(1));
+				}
+				else if(query.charAt(0) == '#'){
+					return document.getElementById(query.substr(1));
+				}
+				else{
+					return document.getElementById(query);
+				}
+			}
+
+			function setBottom(query){
+				if(query){
+					var getBottom = getElement(query);
 					if(getBottom){
 						bottomElement = angular.element(getBottom);
 					}
@@ -63,9 +84,9 @@ angular.module('angular-stretch', [])
 					bottomElement = undefined;
 				}
 			}
-			function setTop(id){
-				if(id){
-					var getTop = document.getElementById(id);
+			function setTop(query){
+				if(query){
+					var getTop = getElement(query);
 					if(getTop){
 						topElement = angular.element(getTop);
 					}
@@ -84,36 +105,38 @@ angular.module('angular-stretch', [])
 				if(!enabled){
 					return;
 				}
-				var elemBounds = element[0].getBoundingClientRect();
+				$timeout(function(){
+					var elemBounds = element[0].getBoundingClientRect();
 
-				if(topElement){
-					var topElemBounds = topElement[0].getBoundingClientRect();
-					if(topElemBounds.bottom < 0 && isFixed(element)){
-						element.css('top', '0px');
-						elemBounds = element[0].getBoundingClientRect();
-					}
-					else{
-						var topDiff = topElemBounds.bottom - elemBounds.top;
-						if(topDiff){
-							element.css('top', (element[0].offsetTop + topDiff)+'px');
+					if(topElement){
+						var topElemBounds = topElement[0].getBoundingClientRect();
+						if(topElemBounds.bottom < 0 && isFixed(element)){
+							element.css('top', '0px');
 							elemBounds = element[0].getBoundingClientRect();
 						}
+						else{
+							var topDiff = topElemBounds.bottom - elemBounds.top;
+							if(topDiff){
+								element.css('top', (element[0].offsetTop + topDiff)+'px');
+								elemBounds = element[0].getBoundingClientRect();
+							}
+						}
 					}
-				}
 
-				var windowHeight = windowElement[0].innerHeight;
-				var heightDiff = windowHeight - elemBounds.bottom;
+					var windowHeight = windowElement[0].innerHeight;
+					var heightDiff = windowHeight - elemBounds.bottom;
 
-				if(bottomElement){
-					var bottomElemBounds = bottomElement[0].getBoundingClientRect();
-					if(bottomElemBounds.top < windowHeight){
-						heightDiff = bottomElemBounds.top - elemBounds.bottom;
+					if(bottomElement){
+						var bottomElemBounds = bottomElement[0].getBoundingClientRect();
+						if(bottomElemBounds.top < windowHeight){
+							heightDiff = bottomElemBounds.top - elemBounds.bottom;
+						}
 					}
-				}
-				
-				if(heightDiff){
-					element.css('height', (element[0].clientHeight + heightDiff)+'px');
-				}
+
+					if(heightDiff){
+						element.css('height', (element[0].clientHeight + heightDiff)+'px');
+					}
+				});
 			}
 		}
 	};

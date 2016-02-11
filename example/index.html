@@ -88,13 +88,13 @@
             <label for="enableStretch">Enable Stretch</label><input id="enableStretch" type="checkbox" ng-model="enableStretch" />
         </div>
         <div class="body" ng-if="showDemo">
-           <div class="demo" ng-stretch="footer" ng-stretch-enabled="{{enableStretch}}"></div>
+           <div class="demo" ng-stretch=".footer" ng-stretch-enabled="{{enableStretch}}"></div>
 
-           <div class="demo positioned absolute" ng-stretch="footer"></div>
-           <div class="demo positioned absolute stretch-top" ng-stretch="footer" ng-stretch-top="header"></div>
+           <div class="demo positioned absolute" ng-stretch="#footer"></div>
+           <div class="demo positioned absolute stretch-top" ng-stretch=".footer" ng-stretch-top=".header"></div>
 
-           <div class="demo positioned fixed" ng-stretch="footer"></div>
-           <div class="demo positioned fixed stretch-top" ng-stretch="footer" ng-stretch-top="header"></div>
+           <div class="demo positioned fixed" ng-stretch="#footer"></div>
+           <div class="demo positioned fixed stretch-top" ng-stretch="#footer" ng-stretch-top="#header"></div>
         </div>
         <div class="footer" id="footer"></div>
     </body>
