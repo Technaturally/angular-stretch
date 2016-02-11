@@ -6,13 +6,51 @@ angular.module('angular-stretch', [])
 			var windowElement = angular.element($window);
 			var bottomElement, topElement;
 
+			var origCss = {
+				top: element.css('top'),
+				height: element.css('height')
+			};
+			var enabled;
+
 			attr.$observe('ngStretch', setBottom);
 			attr.$observe('ngStretchTop', setTop);
+			attr.$observe('ngStretchEnabled', setEnabled);
+			setEnabled(attr['ngStretchEnabled']);
 
-			windowElement.on('resize', checkSize);
-			windowElement.on('scroll', checkSize);
-			element.ready(checkSize);
-			$timeout(checkSize);
+			element.on('$destroy', function(){
+				setEnabled(false);
+			});
+
+			function resetCSS(){
+				for(var prop in origCss){
+					element.css(prop, origCss[prop]);
+				}
+			}
+
+			function setEnabled(stretchEnabled){
+				if(angular.isDefined(stretchEnabled)){
+					if(stretchEnabled !== true && stretchEnabled !== false){
+						stretchEnabled = scope.$eval(stretchEnabled);
+					}
+				}
+				else{
+					stretchEnabled = true;
+				}
+				if(enabled != stretchEnabled){
+					enabled = stretchEnabled;
+					if(!enabled){
+						windowElement.off('resize', checkSize);
+						windowElement.off('scroll', checkSize);
+						resetCSS();
+					}
+					else{
+						windowElement.on('resize', checkSize);
+						windowElement.on('scroll', checkSize);
+						element.ready(checkSize);
+						$timeout(checkSize);
+					}
+				}
+			}
 
 			function setBottom(id){
 				if(id){
@@ -43,6 +81,9 @@ angular.module('angular-stretch', [])
 			}
 
 			function checkSize(){
+				if(!enabled){
+					return;
+				}
 				var elemBounds = element[0].getBoundingClientRect();
 
 				if(topElement){

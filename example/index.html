@@ -9,7 +9,11 @@
         <script src="../angular-stretch.js"></script>
 
         <script type="text/javascript">
-        	angular.module('example', ['angular-stretch']);
+        	angular.module('example', ['angular-stretch']).
+            controller('DemoController', ['$scope', function($scope){
+                $scope.showDemo = true;
+                $scope.enableStretch = true;
+            }]);
         </script>
 
         <style type="text/css">
@@ -23,7 +27,9 @@
                 height: 120px;
             }
             .header {
+                padding: 10px 15px;
                 border-bottom: 3px solid #9F0;
+                color: #9F0;
             }
             .footer {
                 border-top: 3px solid #9F0;
@@ -76,10 +82,13 @@
             }
         </style>
     </head>
-    <body>
-        <div class="header" id="header"></div>
-        <div class="body">
-           <div class="demo" ng-stretch="footer"></div>
+    <body ng-controller="DemoController">
+        <div class="header" id="header">
+            <label for="showDemo">Show Demo</label><input id="showDemo" type="checkbox" ng-model="showDemo" /><br/>
+            <label for="enableStretch">Enable Stretch</label><input id="enableStretch" type="checkbox" ng-model="enableStretch" />
+        </div>
+        <div class="body" ng-if="showDemo">
+           <div class="demo" ng-stretch="footer" ng-stretch-enabled="{{enableStretch}}"></div>
 
            <div class="demo positioned absolute" ng-stretch="footer"></div>
            <div class="demo positioned absolute stretch-top" ng-stretch="footer" ng-stretch-top="header"></div>
