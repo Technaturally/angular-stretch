@@ -32,3 +32,10 @@ Set the `ng-stretch-top` attribute to the id of an element to stretch the top to
 * With `position: fixed;` the element's top will stay within the window.
 * With `position: absolute;` the element's top will scroll out of the window.
 * With no position set, the element's top will scroll out of the window.
+
+#### Dynamic Enabling/Disabling
+Add the `ng-stretch-enabled="{{shouldStretch}}"` attribute if you need to toggle the `ng-stretch` functionality.
+```
+<input type="checkbox" ng-model="shouldStretch />
+<div ng-stretch ng-stretch-enabled="{{shouldStretch}}"></div>
+```
