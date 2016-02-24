@@ -9,10 +9,19 @@
         <script src="../angular-stretch.js"></script>
 
         <script type="text/javascript">
-        	angular.module('example', ['angular-stretch']).
+            angular.module('example', ['angular-stretch']).
             controller('DemoController', ['$scope', function($scope){
                 $scope.showDemo = true;
                 $scope.enableStretch = true;
+                $scope.minStretch = 450;
+                $scope.maxStretch = 500;
+
+                $scope.minAction = function(reached, min){
+                    console.log('MIN of '+min+' '+(reached?'REACHED':'RELEASED'));
+                };
+                $scope.maxAction = function(reached, max){
+                    console.log('MAX of '+max+' '+(reached?'REACHED':'RELEASED'));
+                };
             }]);
         </script>
 
@@ -84,6 +93,11 @@
     </head>
     <body ng-controller="DemoController">
         <div class="header" id="header">
+            <div style="float:right;">
+                <label for="minStretch">Stretch Minimum</label><input id="minStretch" type="number" ng-model="minStretch" /><br/>
+                <label for="maxStretch">Stretch Maximum</label><input id="maxStretch" type="number" ng-model="maxStretch" />
+            </div>
+
             <label for="showDemo">Show Demo</label><input id="showDemo" type="checkbox" ng-model="showDemo" /><br/>
             <label for="enableStretch">Enable Stretch</label><input id="enableStretch" type="checkbox" ng-model="enableStretch" />
         </div>
@@ -94,7 +108,7 @@
            <div class="demo positioned absolute stretch-top" ng-stretch=".footer" ng-stretch-top=".header"></div>
 
            <div class="demo positioned fixed" ng-stretch="#footer"></div>
-           <div class="demo positioned fixed stretch-top" ng-stretch="#footer" ng-stretch-top="#header"></div>
+           <div class="demo positioned fixed stretch-top" ng-stretch="#footer" ng-stretch-top="#header" ng-stretch-min="{{minStretch}}" ng-stretch-min-action="minAction" ng-stretch-max="{{maxStretch}}" ng-stretch-max-action="maxAction"></div>
         </div>
         <div class="footer" id="footer"></div>
     </body>
