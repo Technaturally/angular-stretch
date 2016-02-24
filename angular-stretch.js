@@ -5,6 +5,8 @@ angular.module('angular-stretch', [])
 		link: function(scope, element, attr){
 			var windowElement = angular.element($window);
 			var bottomElement, topElement;
+			var minHeight, minAction;
+			var maxHeight, maxAction;
 
 			var origCss = {
 				top: element[0].style.top,
@@ -14,6 +16,10 @@ angular.module('angular-stretch', [])
 
 			attr.$observe('ngStretch', setBottom);
 			attr.$observe('ngStretchTop', setTop);
+			attr.$observe('ngStretchMin', setMin);
+			attr.$observe('ngStretchMinAction', setMinAction);
+			attr.$observe('ngStretchMax', setMax);
+			attr.$observe('ngStretchMaxAction', setMaxAction);
 			attr.$observe('ngStretchEnabled', setEnabled);
 			setEnabled(attr['ngStretchEnabled']);
 
@@ -25,6 +31,27 @@ angular.module('angular-stretch', [])
 				for(var prop in origCss){
 					element.css(prop, origCss[prop]);
 				}
+			}
+
+			function setMin(stretchMin){
+				minHeight = parseFloat(stretchMin);
+				checkSize();
+			}
+			function setMinAction(stretchMinAction){
+				if(angular.isDefined(stretchMinAction)){
+					stretchMinAction = scope.$eval(stretchMinAction);
+				}
+				minAction = stretchMinAction;
+			}
+			function setMax(stretchMax){
+				maxHeight = parseFloat(stretchMax);
+				checkSize();
+			}
+			function setMaxAction(stretchMaxAction){
+				if(angular.isDefined(stretchMaxAction)){
+					stretchMaxAction = scope.$eval(stretchMaxAction);
+				}
+				maxAction = stretchMaxAction;
 			}
 
 			function setEnabled(stretchEnabled){
@@ -133,8 +160,46 @@ angular.module('angular-stretch', [])
 						}
 					}
 
-					if(heightDiff){
-						element.css('height', (element[0].clientHeight + heightDiff)+'px');
+					// calculate newHeight
+					var newHeight = element[0].clientHeight + heightDiff;
+
+					// check min-stretch bounds
+					if(angular.isDefined(minHeight) && !isNaN(minHeight) && newHeight <= minHeight){
+						newHeight = minHeight;
+						if(element[0].clientHeight != minHeight){
+							element.addClass('stretch-min');
+							if(angular.isDefined(minAction) && angular.isFunction(minAction)){
+								minAction(true, minHeight);
+							}
+						}
+					}
+					else if(element.hasClass('stretch-min')){
+						element.removeClass('stretch-min');
+						if(angular.isDefined(minAction) && angular.isFunction(minAction)){
+							minAction(false, minHeight);
+						}
+					}
+					
+					// check max-stretch bounds
+					if(angular.isDefined(maxHeight) && !isNaN(maxHeight) && newHeight >= maxHeight){
+						newHeight = maxHeight;
+						if(element[0].clientHeight != maxHeight){
+							element.addClass('stretch-max');
+							if(angular.isDefined(maxAction) && angular.isFunction(maxAction)){
+								maxAction(true, maxHeight);
+							}
+						}
+					}
+					else if(element.hasClass('stretch-max')){
+						element.removeClass('stretch-max');
+						if(angular.isDefined(maxAction) && angular.isFunction(maxAction)){
+							maxAction(false, maxHeight);
+						}
+					}
+
+					// update element's height if different from newHeight
+					if(element[0].clientHeight != newHeight){
+						element.css('height', newHeight+'px');
 					}
 				});
 			}
