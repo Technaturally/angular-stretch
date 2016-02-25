@@ -133,6 +133,9 @@ angular.module('angular-stretch', [])
 					return;
 				}
 				$timeout(function(){
+					if(!enabled){
+						return;
+					}
 					var elemBounds = element[0].getBoundingClientRect();
 
 					if(topElement){
