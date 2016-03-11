@@ -13,6 +13,7 @@ angular.module('angular-stretch', [])
 				height: element[0].style.height
 			};
 			var enabled;
+			var stretchListener;
 
 			attr.$observe('ngStretch', setBottom);
 			attr.$observe('ngStretchTop', setTop);
@@ -68,11 +69,18 @@ angular.module('angular-stretch', [])
 					if(!enabled){
 						windowElement.off('resize', checkSize);
 						windowElement.off('scroll', checkSize);
+						if(angular.isFunction(stretchListener)){
+							stretchListener();
+							stretchListener = undefined;
+						}
 						resetCSS();
 					}
 					else{
 						windowElement.on('resize', checkSize);
 						windowElement.on('scroll', checkSize);
+						if(angular.isUndefined(stretchListener)){
+							stretchListener = scope.$on('stretchShouldApply', checkSize);
+						}
 						element.ready(checkSize);
 						$timeout(checkSize);
 					}
