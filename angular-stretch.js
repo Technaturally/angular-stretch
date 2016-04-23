@@ -74,6 +74,7 @@ angular.module('angular-stretch', [])
 							stretchListener = undefined;
 						}
 						resetCSS();
+						element.triggerHandler('stretch', {height: element[0].clientHeight, old_height: element[0].clientHeight});
 					}
 					else{
 						windowElement.on('resize', checkSize);
@@ -87,27 +88,9 @@ angular.module('angular-stretch', [])
 				}
 			}
 
-			// getElement functions provided to avoid dependency on jquery
-			function getElementByClassName(className){
-				var elems = document.getElementsByTagName('*');
-				for(var i=0; i < elems.length; i++){
-					if((' ' + elems[i].className + ' ').indexOf(' ' + className + ' ') != -1) {
-						return elems[i];
-					}
-				}
-			}
 			function getElement(query){
-				if(query.charAt(0) == '.'){
-					return getElementByClassName(query.substr(1));
-				}
-				else if(query.charAt(0) == '#'){
-					return document.getElementById(query.substr(1));
-				}
-				else{
-					return document.getElementById(query);
-				}
+				return document.querySelector(query);
 			}
-
 			function setBottom(query){
 				if(query){
 					var getBottom = getElement(query);
@@ -210,7 +193,9 @@ angular.module('angular-stretch', [])
 
 					// update element's height if different from newHeight
 					if(element[0].clientHeight != newHeight){
+						var oldHeight = element[0].clientHeight;
 						element.css('height', newHeight+'px');
+						element.triggerHandler('stretch', {height: newHeight, old_height: oldHeight});
 					}
 				});
 			}
